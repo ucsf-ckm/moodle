@@ -41,6 +41,7 @@ use tool_dataprivacy\external\data_request_exporter;
 use tool_dataprivacy\local\helper;
 use tool_dataprivacy\task\initiate_data_request_task;
 use tool_dataprivacy\task\process_data_request_task;
+use tool_dataprivacy\data_request;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -234,7 +235,7 @@ class api {
      */
     public static function create_data_request($foruser, $type, $comments = '',
                                                $creationmethod = data_request::DATAREQUEST_CREATION_MANUAL) {
-        global $USER, $ADMIN;
+        global $USER;
 
         $datarequest = new data_request();
         // The user the request is being made for.
@@ -244,7 +245,7 @@ class api {
         // NOTE: This should probably be changed. We should leave the default value for $requestinguser if
         // the request is not explicitly created by a specific user.
         $requestinguser = (isguestuser() && $creationmethod == data_request::DATAREQUEST_CREATION_AUTO) ?
-                $ADMIN->id : $USER->id;
+                get_admin()->id : $USER->id;
         // The user making the request.
         $datarequest->set('requestedby', $requestinguser);
         // Set status.
@@ -253,6 +254,8 @@ class api {
         $datarequest->set('type', $type);
         // Set request comments.
         $datarequest->set('comments', $comments);
+        // Set the creation method.
+        $datarequest->set('creationmethod', $creationmethod);
 
         // Store subject access request.
         $datarequest->create();
@@ -275,6 +278,7 @@ class api {
      * @param int $userid The User ID.
      * @param int[] $statuses The status filters.
      * @param int[] $types The request type filters.
+     * @param int[] $creationmethods The request creation method filters.
      * @param string $sort The order by clause.
      * @param int $offset Amount of records to skip.
      * @param int $limit Amount of records to fetch.
@@ -282,7 +286,8 @@ class api {
      * @throws coding_exception
      * @throws dml_exception
      */
-    public static function get_data_requests($userid = 0, $statuses = [], $types = [], $sort = '', $offset = 0, $limit = 0) {
+    public static function get_data_requests($userid = 0, $statuses = [], $types = [], $creationmethods = [],
+                                             $sort = '', $offset = 0, $limit = 0) {
         global $DB, $USER;
         $results = [];
         $sqlparams = [];
@@ -303,6 +308,13 @@ class api {
         if (!empty($types)) {
             list($typeinsql, $typeparams) = $DB->get_in_or_equal($types, SQL_PARAMS_NAMED);
             $sqlconditions[] = "type $typeinsql";
+            $sqlparams = array_merge($sqlparams, $typeparams);
+        }
+
+        // Set request creation method filter.
+        if (!empty($creationmethods)) {
+            list($typeinsql, $typeparams) = $DB->get_in_or_equal($creationmethods, SQL_PARAMS_NAMED);
+            $sqlconditions[] = "creationmethod $typeinsql";
             $sqlparams = array_merge($sqlparams, $typeparams);
         }
 
@@ -348,7 +360,7 @@ class api {
 
             if (!empty($expiredrequests)) {
                 data_request::expire($expiredrequests);
-                $results = self::get_data_requests($userid, $statuses, $types, $sort, $offset, $limit);
+                $results = self::get_data_requests($userid, $statuses, $types, $creationmethods, $sort, $offset, $limit);
             }
         }
 
@@ -361,11 +373,12 @@ class api {
      * @param int $userid The User ID.
      * @param int[] $statuses The status filters.
      * @param int[] $types The request type filters.
+     * @param int[] $creationmethods The request creation method filters.
      * @return int
      * @throws coding_exception
      * @throws dml_exception
      */
-    public static function get_data_requests_count($userid = 0, $statuses = [], $types = []) {
+    public static function get_data_requests_count($userid = 0, $statuses = [], $types = [], $creationmethods = []) {
         global $DB, $USER;
         $count = 0;
         $sqlparams = [];
@@ -377,6 +390,11 @@ class api {
         if (!empty($types)) {
             list($typeinsql, $typeparams) = $DB->get_in_or_equal($types, SQL_PARAMS_NAMED);
             $sqlconditions[] = "type $typeinsql";
+            $sqlparams = array_merge($sqlparams, $typeparams);
+        }
+        if (!empty($creationmethods)) {
+            list($typeinsql, $typeparams) = $DB->get_in_or_equal($creationmethods, SQL_PARAMS_NAMED);
+            $sqlconditions[] = "creationmethod $typeinsql";
             $sqlparams = array_merge($sqlparams, $typeparams);
         }
         if ($userid) {
@@ -437,14 +455,56 @@ class api {
             self::DATAREQUEST_STATUS_EXPIRED,
             self::DATAREQUEST_STATUS_DELETED,
         ];
-        list($insql, $inparams) = $DB->get_in_or_equal($nonpendingstatuses, SQL_PARAMS_NAMED);
-        $select = 'type = :type AND userid = :userid AND status NOT ' . $insql;
+        list($insql, $inparams) = $DB->get_in_or_equal($nonpendingstatuses, SQL_PARAMS_NAMED, 'st', false);
+        $select = "type = :type AND userid = :userid AND status {$insql}";
         $params = array_merge([
             'type' => $type,
             'userid' => $userid
         ], $inparams);
 
         return data_request::record_exists_select($select, $params);
+    }
+
+    /**
+     * Find whether any ongoing requests exist for a set of users.
+     *
+     * @param   array   $userids
+     * @return  array
+     */
+    public static function find_ongoing_request_types_for_users(array $userids) : array {
+        global $DB;
+
+        if (empty($userids)) {
+            return [];
+        }
+
+        // Check if the user already has an incomplete data request of the same type.
+        $nonpendingstatuses = [
+            self::DATAREQUEST_STATUS_COMPLETE,
+            self::DATAREQUEST_STATUS_CANCELLED,
+            self::DATAREQUEST_STATUS_REJECTED,
+            self::DATAREQUEST_STATUS_DOWNLOAD_READY,
+            self::DATAREQUEST_STATUS_EXPIRED,
+            self::DATAREQUEST_STATUS_DELETED,
+        ];
+        list($statusinsql, $statusparams) = $DB->get_in_or_equal($nonpendingstatuses, SQL_PARAMS_NAMED, 'st', false);
+        list($userinsql, $userparams) = $DB->get_in_or_equal($userids, SQL_PARAMS_NAMED, 'us');
+
+        $select = "userid {$userinsql} AND status {$statusinsql}";
+        $params = array_merge($statusparams, $userparams);
+
+        $requests = $DB->get_records_select(data_request::TABLE, $select, $params, 'userid', 'id, userid, type');
+
+        $returnval = [];
+        foreach ($userids as $userid) {
+            $returnval[$userid] = (object) [];
+        }
+
+        foreach ($requests as $request) {
+            $returnval[$request->userid]->{$request->type} = true;
+        }
+
+        return $returnval;
     }
 
     /**
@@ -963,6 +1023,34 @@ class api {
         }
 
         return data_registry::get_effective_contextlevel_value($contextlevel, 'purpose', $forcedvalue);
+    }
+
+    /**
+     * Creates an expired context record for the provided context id.
+     *
+     * @param int $contextid
+     * @return \tool_dataprivacy\expired_context
+     */
+    public static function create_expired_context($contextid) {
+        $record = (object)[
+            'contextid' => $contextid,
+            'status' => expired_context::STATUS_EXPIRED,
+        ];
+        $expiredctx = new expired_context(0, $record);
+        $expiredctx->save();
+
+        return $expiredctx;
+    }
+
+    /**
+     * Deletes an expired context record.
+     *
+     * @param int $id The tool_dataprivacy_ctxexpire id.
+     * @return bool True on success.
+     */
+    public static function delete_expired_context($id) {
+        $expiredcontext = new expired_context($id);
+        return $expiredcontext->delete();
     }
 
     /**

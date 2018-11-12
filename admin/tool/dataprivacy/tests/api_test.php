@@ -1313,34 +1313,72 @@ class tool_dataprivacy_api_testcase extends advanced_testcase {
         // Initially everything is set to Inherit.
         $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextsystem));
         $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextcat));
+        $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextcat, "-1"));
+        $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextcat, "0"));
         $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextsubcat));
+        $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextsubcat, "-1"));
+        $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextsubcat, "0"));
         $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextcourse));
+        $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextcourse, "-1"));
+        $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextcourse, "0"));
         $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextforum));
+        $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextforum, "-1"));
+        $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextforum, "0"));
         $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextuser));
+        $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextuser, "-1"));
+        $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextuser, "0"));
 
         $this->assertEquals($systemdata->category, api::get_effective_context_category($contextsystem));
         $this->assertEquals($systemdata->category, api::get_effective_context_category($contextcat));
+        $this->assertEquals($systemdata->category, api::get_effective_context_category($contextcat, "-1"));
+        $this->assertEquals($systemdata->category, api::get_effective_context_category($contextcat, "0"));
         $this->assertEquals($systemdata->category, api::get_effective_context_category($contextsubcat));
+        $this->assertEquals($systemdata->category, api::get_effective_context_category($contextsubcat, "-1"));
+        $this->assertEquals($systemdata->category, api::get_effective_context_category($contextsubcat, "0"));
         $this->assertEquals($systemdata->category, api::get_effective_context_category($contextcourse));
+        $this->assertEquals($systemdata->category, api::get_effective_context_category($contextcourse, "-1"));
+        $this->assertEquals($systemdata->category, api::get_effective_context_category($contextcourse, "0"));
         $this->assertEquals($systemdata->category, api::get_effective_context_category($contextforum));
+        $this->assertEquals($systemdata->category, api::get_effective_context_category($contextforum, "-1"));
+        $this->assertEquals($systemdata->category, api::get_effective_context_category($contextforum, "0"));
         $this->assertEquals($systemdata->category, api::get_effective_context_category($contextuser));
+        $this->assertEquals($systemdata->category, api::get_effective_context_category($contextuser, "-1"));
+        $this->assertEquals($systemdata->category, api::get_effective_context_category($contextuser, "0"));
 
         // When actively set, user will use the specified value.
         $userdata = $this->create_and_set_purpose_for_contextlevel('PT1S', CONTEXT_USER);
 
         $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextsystem));
         $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextcat));
+        $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextcat, "-1"));
+        $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextcat, "0"));
         $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextsubcat));
+        $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextsubcat, "-1"));
+        $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextsubcat, "0"));
         $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextcourse));
+        $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextcourse, "-1"));
+        $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextcourse, "0"));
         $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextforum));
+        $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextforum, "-1"));
+        $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextforum, "0"));
         $this->assertEquals($userdata->purpose, api::get_effective_context_purpose($contextuser));
+        $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextuser, "-1"));
 
         $this->assertEquals($systemdata->category, api::get_effective_context_category($contextsystem));
         $this->assertEquals($systemdata->category, api::get_effective_context_category($contextcat));
+        $this->assertEquals($systemdata->category, api::get_effective_context_category($contextcat, "-1"));
+        $this->assertEquals($systemdata->category, api::get_effective_context_category($contextcat, "0"));
         $this->assertEquals($systemdata->category, api::get_effective_context_category($contextsubcat));
+        $this->assertEquals($systemdata->category, api::get_effective_context_category($contextsubcat, "-1"));
+        $this->assertEquals($systemdata->category, api::get_effective_context_category($contextsubcat, "0"));
         $this->assertEquals($systemdata->category, api::get_effective_context_category($contextcourse));
+        $this->assertEquals($systemdata->category, api::get_effective_context_category($contextcourse, "-1"));
+        $this->assertEquals($systemdata->category, api::get_effective_context_category($contextcourse, "0"));
         $this->assertEquals($systemdata->category, api::get_effective_context_category($contextforum));
+        $this->assertEquals($systemdata->category, api::get_effective_context_category($contextforum, "-1"));
+        $this->assertEquals($systemdata->category, api::get_effective_context_category($contextforum, "0"));
         $this->assertEquals($userdata->category, api::get_effective_context_category($contextuser));
+        $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextuser, "-1"));
 
         // Set a context for the top category.
         $catpurpose = new purpose(0, (object) [
@@ -1359,15 +1397,32 @@ class tool_dataprivacy_api_testcase extends advanced_testcase {
 
         $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextsystem));
         $this->assertEquals($catpurpose, api::get_effective_context_purpose($contextcat));
+        $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextcat, "-1"));
+        $this->assertEquals($catpurpose, api::get_effective_context_purpose($contextcat, "0"));
         $this->assertEquals($catpurpose, api::get_effective_context_purpose($contextsubcat));
+        $this->assertEquals($catpurpose, api::get_effective_context_purpose($contextsubcat, "-1"));
+        $this->assertEquals($catpurpose, api::get_effective_context_purpose($contextsubcat, "0"));
         $this->assertEquals($catpurpose, api::get_effective_context_purpose($contextcourse));
+        $this->assertEquals($catpurpose, api::get_effective_context_purpose($contextcourse, "-1"));
+        $this->assertEquals($catpurpose, api::get_effective_context_purpose($contextcourse, "0"));
         $this->assertEquals($catpurpose, api::get_effective_context_purpose($contextforum));
+        $this->assertEquals($catpurpose, api::get_effective_context_purpose($contextforum, "-1"));
+        $this->assertEquals($catpurpose, api::get_effective_context_purpose($contextforum, "0"));
+        $this->assertEquals($catpurpose, api::get_effective_context_purpose($contextforum, "0"));
 
         $this->assertEquals($systemdata->category, api::get_effective_context_category($contextsystem));
         $this->assertEquals($catcategory, api::get_effective_context_category($contextcat));
+        $this->assertEquals($systemdata->category, api::get_effective_context_category($contextcat, "-1"));
+        $this->assertEquals($catcategory, api::get_effective_context_category($contextcat, "0"));
         $this->assertEquals($catcategory, api::get_effective_context_category($contextsubcat));
+        $this->assertEquals($catcategory, api::get_effective_context_category($contextsubcat, "-1"));
+        $this->assertEquals($catcategory, api::get_effective_context_category($contextsubcat, "0"));
         $this->assertEquals($catcategory, api::get_effective_context_category($contextcourse));
+        $this->assertEquals($catcategory, api::get_effective_context_category($contextcourse, "-1"));
+        $this->assertEquals($catcategory, api::get_effective_context_category($contextcourse, "0"));
         $this->assertEquals($catcategory, api::get_effective_context_category($contextforum));
+        $this->assertEquals($catcategory, api::get_effective_context_category($contextforum, "-1"));
+        $this->assertEquals($catcategory, api::get_effective_context_category($contextforum, "0"));
 
         // Set a context for the sub category.
         $subcatpurpose = new purpose(0, (object) [
@@ -1386,15 +1441,31 @@ class tool_dataprivacy_api_testcase extends advanced_testcase {
 
         $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextsystem));
         $this->assertEquals($catpurpose, api::get_effective_context_purpose($contextcat));
+        $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextcat, "-1"));
+        $this->assertEquals($catpurpose, api::get_effective_context_purpose($contextcat, "0"));
         $this->assertEquals($subcatpurpose, api::get_effective_context_purpose($contextsubcat));
+        $this->assertEquals($catpurpose, api::get_effective_context_purpose($contextsubcat, "-1"));
+        $this->assertEquals($subcatpurpose, api::get_effective_context_purpose($contextsubcat, "0"));
         $this->assertEquals($subcatpurpose, api::get_effective_context_purpose($contextcourse));
+        $this->assertEquals($subcatpurpose, api::get_effective_context_purpose($contextcourse, "-1"));
+        $this->assertEquals($subcatpurpose, api::get_effective_context_purpose($contextcourse, "0"));
         $this->assertEquals($subcatpurpose, api::get_effective_context_purpose($contextforum));
+        $this->assertEquals($subcatpurpose, api::get_effective_context_purpose($contextforum, "-1"));
+        $this->assertEquals($subcatpurpose, api::get_effective_context_purpose($contextforum, "0"));
 
         $this->assertEquals($systemdata->category, api::get_effective_context_category($contextsystem));
         $this->assertEquals($catcategory, api::get_effective_context_category($contextcat));
+        $this->assertEquals($systemdata->category, api::get_effective_context_category($contextcat, "-1"));
+        $this->assertEquals($catcategory, api::get_effective_context_category($contextcat, "0"));
         $this->assertEquals($subcatcategory, api::get_effective_context_category($contextsubcat));
+        $this->assertEquals($catcategory, api::get_effective_context_category($contextsubcat, "-1"));
+        $this->assertEquals($subcatcategory, api::get_effective_context_category($contextsubcat, "0"));
         $this->assertEquals($subcatcategory, api::get_effective_context_category($contextcourse));
+        $this->assertEquals($subcatcategory, api::get_effective_context_category($contextcourse, "-1"));
+        $this->assertEquals($subcatcategory, api::get_effective_context_category($contextcourse, "0"));
         $this->assertEquals($subcatcategory, api::get_effective_context_category($contextforum));
+        $this->assertEquals($subcatcategory, api::get_effective_context_category($contextforum, "-1"));
+        $this->assertEquals($subcatcategory, api::get_effective_context_category($contextforum, "0"));
 
         // Set a context for the course.
         $coursepurpose = new purpose(0, (object) [
@@ -1413,15 +1484,31 @@ class tool_dataprivacy_api_testcase extends advanced_testcase {
 
         $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextsystem));
         $this->assertEquals($catpurpose, api::get_effective_context_purpose($contextcat));
+        $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextcat, "-1"));
+        $this->assertEquals($catpurpose, api::get_effective_context_purpose($contextcat, "0"));
         $this->assertEquals($subcatpurpose, api::get_effective_context_purpose($contextsubcat));
+        $this->assertEquals($catpurpose, api::get_effective_context_purpose($contextsubcat, "-1"));
+        $this->assertEquals($subcatpurpose, api::get_effective_context_purpose($contextsubcat, "0"));
         $this->assertEquals($coursepurpose, api::get_effective_context_purpose($contextcourse));
+        $this->assertEquals($subcatpurpose, api::get_effective_context_purpose($contextcourse, "-1"));
+        $this->assertEquals($coursepurpose, api::get_effective_context_purpose($contextcourse, "0"));
         $this->assertEquals($coursepurpose, api::get_effective_context_purpose($contextforum));
+        $this->assertEquals($coursepurpose, api::get_effective_context_purpose($contextforum, "-1"));
+        $this->assertEquals($coursepurpose, api::get_effective_context_purpose($contextforum, "0"));
 
         $this->assertEquals($systemdata->category, api::get_effective_context_category($contextsystem));
         $this->assertEquals($catcategory, api::get_effective_context_category($contextcat));
+        $this->assertEquals($systemdata->category, api::get_effective_context_category($contextcat, "-1"));
+        $this->assertEquals($catcategory, api::get_effective_context_category($contextcat, "0"));
         $this->assertEquals($subcatcategory, api::get_effective_context_category($contextsubcat));
+        $this->assertEquals($catcategory, api::get_effective_context_category($contextsubcat, "-1"));
+        $this->assertEquals($subcatcategory, api::get_effective_context_category($contextsubcat, "0"));
         $this->assertEquals($coursecategory, api::get_effective_context_category($contextcourse));
+        $this->assertEquals($subcatcategory, api::get_effective_context_category($contextcourse, "-1"));
+        $this->assertEquals($coursecategory, api::get_effective_context_category($contextcourse, "0"));
         $this->assertEquals($coursecategory, api::get_effective_context_category($contextforum));
+        $this->assertEquals($coursecategory, api::get_effective_context_category($contextforum, "-1"));
+        $this->assertEquals($coursecategory, api::get_effective_context_category($contextforum, "0"));
 
         // Set a context for the forum.
         $forumpurpose = new purpose(0, (object) [
@@ -1440,15 +1527,132 @@ class tool_dataprivacy_api_testcase extends advanced_testcase {
 
         $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextsystem));
         $this->assertEquals($catpurpose, api::get_effective_context_purpose($contextcat));
+        $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextcat, "-1"));
+        $this->assertEquals($catpurpose, api::get_effective_context_purpose($contextcat, "0"));
         $this->assertEquals($subcatpurpose, api::get_effective_context_purpose($contextsubcat));
+        $this->assertEquals($catpurpose, api::get_effective_context_purpose($contextsubcat, "-1"));
+        $this->assertEquals($subcatpurpose, api::get_effective_context_purpose($contextsubcat, "0"));
         $this->assertEquals($coursepurpose, api::get_effective_context_purpose($contextcourse));
+        $this->assertEquals($subcatpurpose, api::get_effective_context_purpose($contextcourse, "-1"));
+        $this->assertEquals($coursepurpose, api::get_effective_context_purpose($contextcourse, "0"));
         $this->assertEquals($forumpurpose, api::get_effective_context_purpose($contextforum));
+        $this->assertEquals($coursepurpose, api::get_effective_context_purpose($contextforum, "-1"));
+        $this->assertEquals($forumpurpose, api::get_effective_context_purpose($contextforum, "0"));
 
         $this->assertEquals($systemdata->category, api::get_effective_context_category($contextsystem));
         $this->assertEquals($catcategory, api::get_effective_context_category($contextcat));
+        $this->assertEquals($systemdata->category, api::get_effective_context_category($contextcat, "-1"));
+        $this->assertEquals($catcategory, api::get_effective_context_category($contextcat, "0"));
         $this->assertEquals($subcatcategory, api::get_effective_context_category($contextsubcat));
+        $this->assertEquals($catcategory, api::get_effective_context_category($contextsubcat, "-1"));
+        $this->assertEquals($subcatcategory, api::get_effective_context_category($contextsubcat, "0"));
         $this->assertEquals($coursecategory, api::get_effective_context_category($contextcourse));
+        $this->assertEquals($subcatcategory, api::get_effective_context_category($contextcourse, "-1"));
+        $this->assertEquals($coursecategory, api::get_effective_context_category($contextcourse, "0"));
         $this->assertEquals($forumcategory, api::get_effective_context_category($contextforum));
+        $this->assertEquals($coursecategory, api::get_effective_context_category($contextforum, "-1"));
+        $this->assertEquals($forumcategory, api::get_effective_context_category($contextforum, "0"));
+    }
+
+    /**
+     * Ensure that context inheritance works up the context tree when inherit values are explicitly set at the
+     * contextlevel.
+     *
+     * Although it should not be possible to set hard INHERIT values at this level, there may be legacy data which still
+     * contains this.
+     */
+    public function test_effective_context_inheritance_explicitly_set() {
+        $this->resetAfterTest();
+
+        $systemdata = $this->create_and_set_purpose_for_contextlevel('PT1S', CONTEXT_SYSTEM);
+
+        /*
+         * System
+         * - Cat
+         *   - Subcat
+         *     - Course
+         *       - Forum
+         * - User
+         *   - User block
+         */
+        $cat = $this->getDataGenerator()->create_category();
+        $subcat = $this->getDataGenerator()->create_category(['parent' => $cat->id]);
+        $course = $this->getDataGenerator()->create_course(['category' => $subcat->id]);
+        $forum = $this->getDataGenerator()->create_module('forum', ['course' => $course->id]);
+        list(, $forumcm) = get_course_and_cm_from_instance($forum->id, 'forum');
+
+        $contextsystem = \context_system::instance();
+        $contextcat = \context_coursecat::instance($cat->id);
+        $contextsubcat = \context_coursecat::instance($subcat->id);
+        $contextcourse = \context_course::instance($course->id);
+        $contextforum = \context_module::instance($forumcm->id);
+
+        // Initially everything is set to Inherit.
+        $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextsystem));
+        $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextcat));
+        $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextsubcat));
+        $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextcourse));
+        $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextforum));
+
+        $this->assertEquals($systemdata->category, api::get_effective_context_category($contextsystem));
+        $this->assertEquals($systemdata->category, api::get_effective_context_category($contextcat));
+        $this->assertEquals($systemdata->category, api::get_effective_context_category($contextsubcat));
+        $this->assertEquals($systemdata->category, api::get_effective_context_category($contextcourse));
+        $this->assertEquals($systemdata->category, api::get_effective_context_category($contextforum));
+
+        // Set a default value of inherit for CONTEXT_COURSECAT.
+        $classname = \context_helper::get_class_for_level(CONTEXT_COURSECAT);
+        list($purposevar, $categoryvar) = data_registry::var_names_from_context($classname);
+        set_config($purposevar, '-1', 'tool_dataprivacy');
+        set_config($categoryvar, '-1', 'tool_dataprivacy');
+
+        $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextsystem));
+        $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextcat));
+        $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextsubcat));
+        $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextcourse));
+        $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextforum));
+
+        $this->assertEquals($systemdata->category, api::get_effective_context_category($contextsystem));
+        $this->assertEquals($systemdata->category, api::get_effective_context_category($contextcat));
+        $this->assertEquals($systemdata->category, api::get_effective_context_category($contextsubcat));
+        $this->assertEquals($systemdata->category, api::get_effective_context_category($contextcourse));
+        $this->assertEquals($systemdata->category, api::get_effective_context_category($contextforum));
+
+        // Set a default value of inherit for CONTEXT_COURSE.
+        $classname = \context_helper::get_class_for_level(CONTEXT_COURSE);
+        list($purposevar, $categoryvar) = data_registry::var_names_from_context($classname);
+        set_config($purposevar, '-1', 'tool_dataprivacy');
+        set_config($categoryvar, '-1', 'tool_dataprivacy');
+
+        $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextsystem));
+        $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextcat));
+        $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextsubcat));
+        $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextcourse));
+        $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextforum));
+
+        $this->assertEquals($systemdata->category, api::get_effective_context_category($contextsystem));
+        $this->assertEquals($systemdata->category, api::get_effective_context_category($contextcat));
+        $this->assertEquals($systemdata->category, api::get_effective_context_category($contextsubcat));
+        $this->assertEquals($systemdata->category, api::get_effective_context_category($contextcourse));
+        $this->assertEquals($systemdata->category, api::get_effective_context_category($contextforum));
+
+        // Set a default value of inherit for CONTEXT_MODULE.
+        $classname = \context_helper::get_class_for_level(CONTEXT_MODULE);
+        list($purposevar, $categoryvar) = data_registry::var_names_from_context($classname);
+        set_config($purposevar, '-1', 'tool_dataprivacy');
+        set_config($categoryvar, '-1', 'tool_dataprivacy');
+
+        $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextsystem));
+        $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextcat));
+        $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextsubcat));
+        $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextcourse));
+        $this->assertEquals($systemdata->purpose, api::get_effective_context_purpose($contextforum));
+
+        $this->assertEquals($systemdata->category, api::get_effective_context_category($contextsystem));
+        $this->assertEquals($systemdata->category, api::get_effective_context_category($contextcat));
+        $this->assertEquals($systemdata->category, api::get_effective_context_category($contextsubcat));
+        $this->assertEquals($systemdata->category, api::get_effective_context_category($contextcourse));
+        $this->assertEquals($systemdata->category, api::get_effective_context_category($contextforum));
     }
 
     /**
@@ -2051,5 +2255,117 @@ class tool_dataprivacy_api_testcase extends advanced_testcase {
             'purpose' => $purpose,
             'category' => $cat,
         ];
+    }
+
+    /**
+     * Ensure that the find_ongoing_request_types_for_users only returns requests which are active.
+     */
+    public function test_find_ongoing_request_types_for_users() {
+        $this->resetAfterTest();
+
+        // Create users and their requests:.
+        // - u1 has no requests of any type.
+        // - u2 has one rejected export request.
+        // - u3 has one rejected other request.
+        // - u4 has one rejected delete request.
+        // - u5 has one active and one rejected export request.
+        // - u6 has one active and one rejected other request.
+        // - u7 has one active and one rejected delete request.
+        // - u8 has one active export, and one active delete request.
+        $u1 = $this->getDataGenerator()->create_user();
+        $u1expect = (object) [];
+
+        $u2 = $this->getDataGenerator()->create_user();
+        $this->create_request_with_type_and_status($u2->id, api::DATAREQUEST_TYPE_EXPORT, api::DATAREQUEST_STATUS_REJECTED);
+        $u2expect = (object) [];
+
+        $u3 = $this->getDataGenerator()->create_user();
+        $this->create_request_with_type_and_status($u3->id, api::DATAREQUEST_TYPE_OTHERS, api::DATAREQUEST_STATUS_REJECTED);
+        $u3expect = (object) [];
+
+        $u4 = $this->getDataGenerator()->create_user();
+        $this->create_request_with_type_and_status($u4->id, api::DATAREQUEST_TYPE_DELETE, api::DATAREQUEST_STATUS_REJECTED);
+        $u4expect = (object) [];
+
+        $u5 = $this->getDataGenerator()->create_user();
+        $this->create_request_with_type_and_status($u5->id, api::DATAREQUEST_TYPE_EXPORT, api::DATAREQUEST_STATUS_REJECTED);
+        $this->create_request_with_type_and_status($u5->id, api::DATAREQUEST_TYPE_EXPORT, api::DATAREQUEST_STATUS_APPROVED);
+        $u5expect = (object) [
+            api::DATAREQUEST_TYPE_EXPORT => true,
+        ];
+
+        $u6 = $this->getDataGenerator()->create_user();
+        $this->create_request_with_type_and_status($u6->id, api::DATAREQUEST_TYPE_OTHERS, api::DATAREQUEST_STATUS_REJECTED);
+        $this->create_request_with_type_and_status($u6->id, api::DATAREQUEST_TYPE_OTHERS, api::DATAREQUEST_STATUS_APPROVED);
+        $u6expect = (object) [
+            api::DATAREQUEST_TYPE_OTHERS => true,
+        ];
+
+        $u7 = $this->getDataGenerator()->create_user();
+        $this->create_request_with_type_and_status($u7->id, api::DATAREQUEST_TYPE_DELETE, api::DATAREQUEST_STATUS_REJECTED);
+        $this->create_request_with_type_and_status($u7->id, api::DATAREQUEST_TYPE_DELETE, api::DATAREQUEST_STATUS_APPROVED);
+        $u7expect = (object) [
+            api::DATAREQUEST_TYPE_DELETE => true,
+        ];
+
+        $u8 = $this->getDataGenerator()->create_user();
+        $this->create_request_with_type_and_status($u8->id, api::DATAREQUEST_TYPE_EXPORT, api::DATAREQUEST_STATUS_APPROVED);
+        $this->create_request_with_type_and_status($u8->id, api::DATAREQUEST_TYPE_DELETE, api::DATAREQUEST_STATUS_APPROVED);
+        $u8expect = (object) [
+            api::DATAREQUEST_TYPE_EXPORT => true,
+            api::DATAREQUEST_TYPE_DELETE => true,
+        ];
+
+        // Test with no users specified.
+        $result = api::find_ongoing_request_types_for_users([]);
+        $this->assertEquals([], $result);
+
+        // Fetch a subset of the users.
+        $result = api::find_ongoing_request_types_for_users([$u3->id, $u4->id, $u5->id]);
+        $this->assertEquals([
+                $u3->id => $u3expect,
+                $u4->id => $u4expect,
+                $u5->id => $u5expect,
+            ], $result);
+
+        // Fetch the empty user.
+        $result = api::find_ongoing_request_types_for_users([$u1->id]);
+        $this->assertEquals([
+                $u1->id => $u1expect,
+            ], $result);
+
+        // Fetch all.
+        $result = api::find_ongoing_request_types_for_users(
+            [$u1->id, $u2->id, $u3->id, $u4->id, $u5->id, $u6->id, $u7->id, $u8->id]);
+        $this->assertEquals([
+                $u1->id => $u1expect,
+                $u2->id => $u2expect,
+                $u3->id => $u3expect,
+                $u4->id => $u4expect,
+                $u5->id => $u5expect,
+                $u6->id => $u6expect,
+                $u7->id => $u7expect,
+                $u8->id => $u8expect,
+            ], $result);
+    }
+
+    /**
+     * Create  a new data request for the user with the type and status specified.
+     *
+     * @param   int     $userid
+     * @param   int     $type
+     * @param   int     $status
+     * @return  \tool_dataprivacy\data_request
+     */
+    protected function create_request_with_type_and_status(int $userid, int $type, int $status) : \tool_dataprivacy\data_request {
+        $request = new \tool_dataprivacy\data_request(0, (object) [
+            'userid' => $userid,
+            'type' => $type,
+            'status' => $status,
+        ]);
+
+        $request->save();
+
+        return $request;
     }
 }
