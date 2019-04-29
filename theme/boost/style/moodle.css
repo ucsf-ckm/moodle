@@ -10967,6 +10967,10 @@ div.editor_atto_toolbar button .icon {
 .modal.modal-in-page {
   z-index: 0; }
 
+@media (min-width: 576px) {
+  #page-admin-search .container {
+    overflow-wrap: break-word; } }
+
 .blockmovetarget .accesshide {
   position: relative;
   left: initial; }
@@ -12490,7 +12494,9 @@ span.editinstructions {
   height: 60px;
   /* fixed header height*/
   margin-top: -60px;
-  /* negative fixed header height */ }
+  /* negative fixed header height */
+  width: 1px;
+  pointer-events: none; }
 
 .pagelayout-embedded :target {
   padding-top: initial;
