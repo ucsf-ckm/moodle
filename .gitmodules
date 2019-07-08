@@ -93,6 +93,10 @@
 	path = local/iliosapiclient
 	url = git://github.com/ilios/local_iliosapiclient.git
 	branch = master
+[submodule "local/instructor_files"]
+	path = local/instructor_files
+	url = git://github.com/LafColITS/moodle-local_instructor_files
+        tag = v3.4.0
 [submodule "local/maintenance_livecheck"]
 	path = local/maintenance_livecheck
 	url = git://github.com/moodleuulm/moodle-local_maintenance_livecheck.git
